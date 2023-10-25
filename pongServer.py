@@ -1,5 +1,5 @@
 # =================================================================================================
-# Contributing Authors:	    <Anyone who touched the code>
+# Contributing Authors:	    <Emily Behrendsen, Margaret Bacon>
 # Email Addresses:          <Your uky.edu email addresses>
 # Date:                     <The date the file was last edited>
 # Purpose:                  <How this file contributes to the project>
