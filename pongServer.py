@@ -1,6 +1,6 @@
 # =================================================================================================
 # Contributing Authors:	    <Emily Behrendsen, Margaret Bacon>
-# Email Addresses:          <Your uky.edu email addresses>
+# Email Addresses:          <eabe247@uky.edu, meba293@uky.edu>
 # Date:                     <The date the file was last edited>
 # Purpose:                  <How this file contributes to the project>
 # Misc:                     <Not Required.  Anything else you might want to include>
