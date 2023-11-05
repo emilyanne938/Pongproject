@@ -83,7 +83,9 @@ def playGame(screenWidth:int, screenHeight:int, playerPaddle:str, client:socket.
         # where the ball is and the current score.
         # Feel free to change when the score is updated to suit your needs/requirements
         
-        
+
+        #client.send(#location of ball)
+        #client.send(#)
         # =========================================================================================
 
         # Update the player paddle and opponent paddle's location on the screen
@@ -175,6 +177,9 @@ def joinServer(ip:str, port:str, errorLabel:tk.Label, app:tk.Tk) -> None:
     # Create a socket and connect to the server
     # You don't have to use SOCK_STREAM, use what you think is best
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    #connect to the server!
+    client.connect(("localhost", 8888))
 
     # Get the required information from your server (screen width, height & player paddle, "left or "right)
 
