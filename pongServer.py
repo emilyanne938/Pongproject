@@ -22,9 +22,9 @@ server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) 
 
 # Bind the socket to a specific IP address and port
-server_socket.bind(("localHost", 8888))
+server_socket.bind(("localhost", 8888))
 
-# Put the server socket in a listening state (the server can have up to 5 pending client connections waiting in a queue)
+# Put the server socket in a listening state 
 server_socket.listen(5)
 
 clientSocket, clientAddress = server_socket.accept()
