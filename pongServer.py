@@ -17,22 +17,42 @@ import threading
 # clients are and take actions to resync the games
 
 # Create a socket
-server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) 
+serverSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) 
 
 # Bind the socket to a specific IP address and port
-server_socket.bind(("localhost", 8888))
+serverSocket.bind(("localhost", 8888))
 
 # Put the server socket in a listening state 
-server_socket.listen(5)
+serverSocket.listen(5)
 
-clientSocket, clientAddress = server_socket.accept()
+clientSocket, clientAddress = serverSocket.accept()
 
-# Left or right assignment
+numClients = 0
 
-# while True: 
+msg = ""
+msg = clientSocket.recv(1024).decode()
+print("Client sent: {msg}")
+
+screenWidth = 640
+screenHeight = 480
+
+if numClients % 2 == 1:
+    playerPaddle = "left"
+else:
+    playerPaddle = "right"
+
+check = msg.recv(1024).decode
+
+serverSocket.send(screenHeight)
+
+if check == "height_ack":
+    serverSocket.send(screenWidth)
+
+if check == "width_ack":
+    serverSocket.send(playerPaddle)
 
 
 clientSocket.close()
-server_socket.close()
+serverSocket.close()
