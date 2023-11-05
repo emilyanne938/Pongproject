@@ -181,17 +181,28 @@ def joinServer(ip:str, port:str, errorLabel:tk.Label, app:tk.Tk) -> None:
     #connect to the server!
     client.connect(("localhost", 8888))
 
+    msg = "Can I play?"
+    client.send(msg.encode())
+
     # Get the required information from your server (screen width, height & player paddle, "left or "right)
+    screenHeight = client.recv(1024).decode 
+    msg = "height_ack"
+    client.send(msg.encode()) 
 
+    screenWidth = client.recv(1024)
+    msg = "width_ack"
+    client.send(msg.encode()) 
 
-    # If you have messages you'd like to show the user use the errorLabel widget like so
-    errorLabel.config(text=f"Some update text. You input: IP: {ip}, Port: {port}")
+    paddle = client.recv(1024)
+
+    # p}, Port: {porIf you have messages you'd like to show the user use the errorLabel widget like so
+    errorLabel.config(text=f"Some update text. You input: IP: {it}")
     # You may or may not need to call this, depending on how many times you update the label
     errorLabel.update()     
 
     # Close this window and start the game with the info passed to you from the server
     #app.withdraw()     # Hides the window (we'll kill it later)
-    #playGame(screenWidth, screenHeight, ("left"|"right"), client)  # User will be either left or right paddle
+    playGame(screenWidth, screenHeight, paddle, client)  # User will be either left or right paddle
     #app.quit()         # Kills the window
 
 
@@ -219,6 +230,12 @@ def startScreen():
 
     errorLabel = tk.Label(text="")
     errorLabel.grid(column=0, row=4, columnspan=2)
+
+    x = portEntry.get()
+    y = ipEntry.get()
+
+    print(y)
+    print(x)
 
     joinButton = tk.Button(text="Join", command=lambda: joinServer(ipEntry.get(), portEntry.get(), errorLabel, app))
     joinButton.grid(column=0, row=3, columnspan=2)
