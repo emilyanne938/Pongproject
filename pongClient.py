@@ -179,24 +179,24 @@ def joinServer(ip:str, port:str, errorLabel:tk.Label, app:tk.Tk) -> None:
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     #connect to the server!
-    client.connect(("localhost", 8888))
+    client.connect((ip, int(port)))
 
     msg = "Can I play?"
     client.send(msg.encode())
 
     # Get the required information from your server (screen width, height & player paddle, "left or "right)
-    screenHeight = client.recv(1024).decode 
+    screenHeight = client.recv(1024).decode()
     msg = "height_ack"
     client.send(msg.encode()) 
 
-    screenWidth = client.recv(1024)
+    screenWidth = client.recv(1024).decode()
     msg = "width_ack"
     client.send(msg.encode()) 
 
     paddle = client.recv(1024)
 
     # p}, Port: {porIf you have messages you'd like to show the user use the errorLabel widget like so
-    errorLabel.config(text=f"Some update text. You input: IP: {it}")
+    errorLabel.config(text=f"Some update text. You input: IP: {ip}")
     # You may or may not need to call this, depending on how many times you update the label
     errorLabel.update()     
 
