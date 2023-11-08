@@ -186,14 +186,17 @@ def joinServer(ip:str, port:str, errorLabel:tk.Label, app:tk.Tk) -> None:
 
     # Get the required information from your server (screen width, height & player paddle, "left or "right)
     screenHeight = client.recv(1024).decode()
+    screenHeight = int(screenHeight)
+
     msg = "height_ack"
     client.send(msg.encode()) 
 
     screenWidth = client.recv(1024).decode()
+    screenWidth = int(screenWidth)
     msg = "width_ack"
     client.send(msg.encode()) 
 
-    paddle = client.recv(1024)
+    paddle = client.recv(1024).decode()
 
     # p}, Port: {porIf you have messages you'd like to show the user use the errorLabel widget like so
     errorLabel.config(text=f"Some update text. You input: IP: {ip}")
@@ -201,9 +204,9 @@ def joinServer(ip:str, port:str, errorLabel:tk.Label, app:tk.Tk) -> None:
     errorLabel.update()     
 
     # Close this window and start the game with the info passed to you from the server
-    #app.withdraw()     # Hides the window (we'll kill it later)
+    app.withdraw()     # Hides the window (we'll kill it later)
     playGame(screenWidth, screenHeight, paddle, client)  # User will be either left or right paddle
-    #app.quit()         # Kills the window
+    app.quit()         # Kills the window
 
 
 # This displays the opening screen, you don't need to edit this (but may if you like)
