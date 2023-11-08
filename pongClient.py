@@ -205,7 +205,13 @@ def joinServer(ip:str, port:str, errorLabel:tk.Label, app:tk.Tk) -> None:
 
     # Close this window and start the game with the info passed to you from the server
     app.withdraw()     # Hides the window (we'll kill it later)
-    playGame(screenWidth, screenHeight, paddle, client)  # User will be either left or right paddle
+
+    numClients = client.recv(1024).decode()
+    numClients = int(numClients)
+
+    if numClients == 2:
+        playGame(screenWidth, screenHeight, paddle, client)  # User will be either left or right paddle
+        
     app.quit()         # Kills the window
 
 
