@@ -45,6 +45,8 @@ def connection(serverSocket:socket.socket, clientSocket:socket.socket, numClient
     if check == "width_ack":
         clientSocket.send(playerPaddle.encode())
 
+    clientSocket.send(str(numClients).encode())
+
 
 
 def main():
@@ -64,6 +66,7 @@ def main():
 
             # make threads
             currentNumClients += 1
+
             thread = Thread(target = connection, args = (serverSocket, clientSocket, currentNumClients))
             
             print(currentNumClients)
