@@ -16,55 +16,43 @@ from threading import Thread
 # I suggest you use the sync variable in pongClient.py to determine how out of sync your two
 # clients are and take actions to resync the games
 
-quit = True
+quit = False
 
-def createServer():
+def createServer() -> socket.socket:
     serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     serverSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) 
     serverSocket.bind(("localhost", 22222))
-    serverSocket.listen()
-    clientSocket, clientAddress = serverSocket.accept()
+    
     return serverSocket
 
-def connection(serverSocket, clientSocket):
+def connection(serverSocket:socket.socket, clientSocket:socket.socket, numClients:int):
     msg = ""
     screenWidth = 640
     screenHeight = 480
-    numClients = 0
 
     if numClients % 2 == 1:
         playerPaddle = "left"
     else:
         playerPaddle = "right"
 
+    clientSocket.send(str(screenHeight).encode())
+    
     check = clientSocket.recv(1024).decode()
-
-    serverSocket.send(screenHeight)
-
-    if check == "height_res":
-        serverSocket.send(screenWidth)
+    if check == "height_ack":
+        clientSocket.send(str(screenWidth).encode())
 
     check = clientSocket.recv(1024).decode()
-
-    if check == "width_res":
-        serverSocket.send(playerPaddle)
+    if check == "width_ack":
+        clientSocket.send(playerPaddle.encode())
 
 
 
 def main():
     serverSocket = createServer()
-
-
-    # 
-    serverSocket.recv
-    # connection(serverSocket)
+    serverSocket.listen()
     
-
     maxplayers = 2
     currentNumClients = 0
-    
-    clientSocket, clientAddress = serverSocket.accept()
-    # args = (serverSocket, clientSocket,)
 
     while not quit:
 
@@ -72,15 +60,13 @@ def main():
         msg = clientSocket.recv(1024).decode()
         print(msg)
 
-        if (msg == "Can I play?") & (currentNumClients <= maxplayers):
+        if (msg == "Can I play?") and (currentNumClients <= maxplayers):
 
-            print("did we get here")
-            msg == ""
-            # make treads
-            thread = Thread(target = connection, args = (serverSocket, clientSocket))
-            print(currentNumClients)
+            # make threads
             currentNumClients += 1
-            print("how about here")
+            thread = Thread(target = connection, args = (serverSocket, clientSocket, currentNumClients))
+            
+            print(currentNumClients)
             thread.start()
 
 
