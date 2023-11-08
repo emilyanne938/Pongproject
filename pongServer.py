@@ -16,6 +16,9 @@ from threading import Thread
 # I suggest you use the sync variable in pongClient.py to determine how out of sync your two
 # clients are and take actions to resync the games
 
+#def status():
+    
+
 quit = False
 
 def createServer() -> socket.socket:
@@ -72,6 +75,9 @@ def main():
             print(currentNumClients)
             thread.start()
 
+        
+    
+
 
     serverSocket.close()
 
@@ -84,50 +90,3 @@ if __name__ == "__main__" :
     
     # accept new clients
     # create threads
-
-
-  
-
-
-
-# # Create a socket
-# serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-# # serverSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) 
-# # serverIP ="localhost"
-# # serverPort = 8888
-# # Bind the socket to a specific IP address and port
-# serverSocket.bind(("localhost", 22222))
-
-# # Put the server socket in a listening state 
-# serverSocket.listen(5)
-
-# clientSocket, clientAddress = serverSocket.accept()
-
-# numClients = 0
-
-# msg = ""
-# # msg = clientSocket.recv(1024).decode()
-# # print("Client sent: {msg}")
-
-# screenWidth = 640
-# screenHeight = 480
-
-# if numClients % 2 == 1:
-#     playerPaddle = "left"
-# else:
-#     playerPaddle = "right"
-
-# check = msg.recv(1024).decode
-
-# serverSocket.send(screenHeight)
-
-# if check == "height_ack":
-#     serverSocket.send(screenWidth)
-
-# if check == "width_ack":
-#     serverSocket.send(playerPaddle)
-
-
-# # clientSocket.close()
-# # serverSocket.close()

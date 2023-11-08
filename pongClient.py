@@ -157,6 +157,23 @@ def playGame(screenWidth:int, screenHeight:int, playerPaddle:str, client:socket.
         # Send your server update here at the end of the game loop to sync your game with your
         # opponent's game
 
+        clientSync = client.recv(1024).decode()
+
+        if sync != clientSync:
+            client.send(sync.encode())
+
+
+        clientStatus = client.recv(1024)
+        data = clientStatus.decode()
+
+        if playerPaddle == "left":
+            paddle.rect.x = 0
+            paddle.rect.y = 0
+        else:
+            paddle.rect.x = 0
+            paddle.rect.y = 0
+
+        
         # =========================================================================================
 
 
@@ -211,7 +228,7 @@ def joinServer(ip:str, port:str, errorLabel:tk.Label, app:tk.Tk) -> None:
 
     if numClients == 2:
         playGame(screenWidth, screenHeight, paddle, client)  # User will be either left or right paddle
-        
+
     app.quit()         # Kills the window
 
 
