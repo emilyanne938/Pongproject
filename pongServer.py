@@ -28,12 +28,12 @@ def createServer() -> socket.socket:
     
     return serverSocket
 
-def connection(serverSocket:socket.socket, clientSocket:socket.socket, numClients:int):
+def connection(serverSocket:socket.socket, clientSocket:socket.socket, clientList:list[socket.socket]):
     msg = ""
     screenWidth = 640
     screenHeight = 480
 
-    if numClients % 2 == 1:
+    if len(clientList) % 2 == 1:
         playerPaddle = "left"
     else:
         playerPaddle = "right"
@@ -48,7 +48,11 @@ def connection(serverSocket:socket.socket, clientSocket:socket.socket, numClient
     if check == "width_ack":
         clientSocket.send(playerPaddle.encode())
 
-    clientSocket.send(str(numClients).encode())
+    
+    if playerPaddle == "right":
+        clientList[0].send(str("go").encode())
+
+    #clientSocket.send(str(numClients).encode())
 
 
 
@@ -59,9 +63,12 @@ def main():
     maxplayers = 2
     currentNumClients = 0
 
-    while not quit:
+    clientList = []
 
+    while not quit:
+        
         clientSocket, clientAddress = serverSocket.accept()
+        clientList.append(clientSocket)
         msg = clientSocket.recv(1024).decode()
         print(msg)
 
@@ -70,15 +77,12 @@ def main():
             # make threads
             currentNumClients += 1
 
-            thread = Thread(target = connection, args = (serverSocket, clientSocket, currentNumClients))
+            thread = Thread(target = connection, args = (serverSocket, clientSocket, clientList))
             
             print(currentNumClients)
             thread.start()
 
         
-    
-
-
     serverSocket.close()
 
 

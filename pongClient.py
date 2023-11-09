@@ -157,21 +157,21 @@ def playGame(screenWidth:int, screenHeight:int, playerPaddle:str, client:socket.
         # Send your server update here at the end of the game loop to sync your game with your
         # opponent's game
 
-        clientSync = client.recv(1024).decode()
+        #clientSync = client.recv(1024).decode()
 
-        if sync != clientSync:
-            client.send(sync.encode())
+        #if sync != clientSync:
+         #   client.send(sync.encode())
 
 
-        clientStatus = client.recv(1024)
-        data = clientStatus.decode()
+      #  clientStatus = client.recv(1024)
+       # data = clientStatus.decode()
 
-        if playerPaddle == "left":
-            paddle.rect.x = 0
-            paddle.rect.y = 0
-        else:
-            paddle.rect.x = 0
-            paddle.rect.y = 0
+        #if playerPaddle == "left":
+         #   paddle.rect.x = 0
+          #  paddle.rect.y = 0
+        #else:
+         #   paddle.rect.x = 0
+          #  paddle.rect.y = 0
 
         
         # =========================================================================================
@@ -215,20 +215,25 @@ def joinServer(ip:str, port:str, errorLabel:tk.Label, app:tk.Tk) -> None:
 
     paddle = client.recv(1024).decode()
 
+
+
+
     # p}, Port: {porIf you have messages you'd like to show the user use the errorLabel widget like so
-    errorLabel.config(text=f"Some update text. You input: IP: {ip}")
+    
     # You may or may not need to call this, depending on how many times you update the label
-    errorLabel.update()     
+    #errorLabel.update()
+
+    if paddle == "left":
+        errorLabel.config(text=f"Connected and waiting on player 2.")
+        errorLabel.update()
+
+        go = client.recv(1024).decode()
+        if go != "go":
+            print(f"Unexpected reponse from server: {go}")     
 
     # Close this window and start the game with the info passed to you from the server
     app.withdraw()     # Hides the window (we'll kill it later)
-
-    numClients = client.recv(1024).decode()
-    numClients = int(numClients)
-
-    if numClients == 2:
-        playGame(screenWidth, screenHeight, paddle, client)  # User will be either left or right paddle
-
+    playGame(screenWidth, screenHeight, paddle, client)  # User will be either left or right paddle
     app.quit()         # Kills the window
 
 
