@@ -157,21 +157,21 @@ def playGame(screenWidth:int, screenHeight:int, playerPaddle:str, client:socket.
         # Send your server update here at the end of the game loop to sync your game with your
         # opponent's game
 
-        #clientSync = client.recv(1024).decode()
+        # ball x, ball y, player paddle x, player paddle y, opponent paddle x, opponent paddle y, player score, opponent score, sync
+        gamestate = [ball.rect.x, ball.rect.y, playerPaddleObj.rect.x, playerPaddleObj.rect.y, opponentPaddleObj.rect.x, opponentPaddleObj.rect.y, lScore, rScore, sync]
 
-        #if sync != clientSync:
-         #   client.send(sync.encode())
+        client.send(gamestate)
 
-
-      #  clientStatus = client.recv(1024)
-       # data = clientStatus.decode()
-
-        #if playerPaddle == "left":
-         #   paddle.rect.x = 0
-          #  paddle.rect.y = 0
-        #else:
-         #   paddle.rect.x = 0
-          #  paddle.rect.y = 0
+        updatedgamestate = client.recv(1024)
+        ball.rect.x = updatedgamestate[0]
+        ball.rect.y = updatedgamestate[1]
+        playerPaddleObj.rect.x = updatedgamestate[2]
+        playerPaddleObj.rect.y = updatedgamestate[3]
+        opponentPaddleObj.rect.x = updatedgamestate[4]
+        opponentPaddleObj.rect.y = updatedgamestate[5]
+        lScore = updatedgamestate[6]
+        rScore = updatedgamestate[7]
+        sync = updatedgamestate[8]
 
         
         # =========================================================================================

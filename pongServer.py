@@ -15,11 +15,18 @@ from threading import Thread
 # for each player and where the ball is, and relay that to each client
 # I suggest you use the sync variable in pongClient.py to determine how out of sync your two
 # clients are and take actions to resync the games
-
-#def status():
-    
-
+ 
 quit = False
+
+def status(serverSocket:socket.socket, clientSocket:socket.socket, clientList:list[socket.socket]): 
+    gamestate1:list = clientSocket.recv(1024)
+    gamestate2:list = clientSocket.recv(1024)
+
+    if gamestate1[8] > gamestate2[8]:
+        clientSocket.send(gamestate1)
+    else:
+        clientSocket.send(gamestate2)
+
 
 def createServer() -> socket.socket:
     serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -52,6 +59,8 @@ def connection(serverSocket:socket.socket, clientSocket:socket.socket, clientLis
     if playerPaddle == "right":
         clientList[0].send(str("go").encode())
 
+    while True:
+        status(serverSocket, clientSocket, clientList)
     #clientSocket.send(str(numClients).encode())
 
 
