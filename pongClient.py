@@ -158,11 +158,12 @@ def playGame(screenWidth:int, screenHeight:int, playerPaddle:str, client:socket.
         # opponent's game
 
         # ball x, ball y, player paddle x, player paddle y, opponent paddle x, opponent paddle y, player score, opponent score, sync
-        gamestate = [ball.rect.x, ball.rect.y, playerPaddleObj.rect.x, playerPaddleObj.rect.y, opponentPaddleObj.rect.x, opponentPaddleObj.rect.y, lScore, rScore, sync]
+        strgamestate = f"{ball.rect.x},{ball.rect.y},{playerPaddleObj.rect.x},{playerPaddleObj.rect.y},{opponentPaddleObj.rect.x},{opponentPaddleObj.rect.y},{lScore},{rScore},{sync}"
 
-        client.send(gamestate)
+        client.send(strgamestate.encode())
 
-        updatedgamestate = client.recv(1024)
+        stringstate = client.recv(1024).decode()
+        updatedgamestate = stringstate.split(",")
         ball.rect.x = updatedgamestate[0]
         ball.rect.y = updatedgamestate[1]
         playerPaddleObj.rect.x = updatedgamestate[2]
