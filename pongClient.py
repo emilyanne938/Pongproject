@@ -164,15 +164,15 @@ def playGame(screenWidth:int, screenHeight:int, playerPaddle:str, client:socket.
 
         stringstate = client.recv(1024).decode()
         updatedgamestate = stringstate.split(",")
-        ball.rect.x = updatedgamestate[0]
-        ball.rect.y = updatedgamestate[1]
-        playerPaddleObj.rect.x = updatedgamestate[2]
-        playerPaddleObj.rect.y = updatedgamestate[3]
-        opponentPaddleObj.rect.x = updatedgamestate[4]
-        opponentPaddleObj.rect.y = updatedgamestate[5]
-        lScore = updatedgamestate[6]
-        rScore = updatedgamestate[7]
-        sync = updatedgamestate[8]
+        ball.rect.x = int(updatedgamestate[0])
+        ball.rect.y = int(updatedgamestate[1])
+        playerPaddleObj.rect.x = int(updatedgamestate[2])
+        playerPaddleObj.rect.y = int(updatedgamestate[3])
+        opponentPaddleObj.rect.x = int(updatedgamestate[4])
+        opponentPaddleObj.rect.y = int(updatedgamestate[5])
+        lScore = int(updatedgamestate[6])
+        rScore = int(updatedgamestate[7])
+        sync = int(updatedgamestate[8])
 
         
         # =========================================================================================

@@ -30,7 +30,10 @@ def status(serverSocket:socket.socket, clientSocket:socket.socket, clientList:li
     updatedgamestate1 = strgamestate1.split(",")
     updatedgamestate2 = strgamestate2.split(",")
 
-    if updatedgamestate1[8] > updatedgamestate2[8]:
+    state1 = int(updatedgamestate1[8])
+    state2 = int(updatedgamestate2[8])
+
+    if state1 > state2:
         clientSocket.send(strgamestate1.encode())
     else:
         clientSocket.send(strgamestate2.encode())
