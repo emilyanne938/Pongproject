@@ -19,19 +19,27 @@ from threading import Thread
 quit = False
 
 def status(serverSocket:socket.socket, clientSocket:socket.socket, clientList:list[socket.socket]): 
-    gamestate1:list = clientSocket.recv(1024)
-    gamestate2:list = clientSocket.recv(1024)
+    # clientList[0].recv(1024).decode() and clientList[1].recv(1024).decode().
+    strgamestate1 = clientList[0].recv(1024).decode()
+    strgamestate2 = clientList[1].recv(1024).decode()
+    # strgamestate1 = clientSocket.recv(1024).decode()
+    # strgamestate2 = clientSocket.recv(1024).decode()
+    # strgamestate1 = clientList[0].decode()
+    # strgamestate2 = clientList[1]
 
-    if gamestate1[8] > gamestate2[8]:
-        clientSocket.send(gamestate1)
+    updatedgamestate1 = strgamestate1.split(",")
+    updatedgamestate2 = strgamestate2.split(",")
+
+    if updatedgamestate1[8] > updatedgamestate2[8]:
+        clientSocket.send(strgamestate1.encode())
     else:
-        clientSocket.send(gamestate2)
+        clientSocket.send(strgamestate2.encode())
 
 
 def createServer() -> socket.socket:
     serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     serverSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) 
-    serverSocket.bind(("localhost", 22222))
+    serverSocket.bind(("localhost", 22225))
     
     return serverSocket
 
