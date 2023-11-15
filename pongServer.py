@@ -73,11 +73,11 @@ def connection(serverSocket:socket.socket, clientSocket:socket.socket, clientLis
         clientList[0].send(str("go").encode())
 
     # while True:
-    #     status(serverSocket, clientSocket, clientList)
+    #     handleClient(clientSocket, 2)
     # #clientSocket.send(str(numClients).encode())
 
 
-def handleClient(clientSocket:socket.socket, clientNum):
+def handleClient(clientSocket:socket.socket, clientNum, clientList:list[socket.socket]):
     global client1gameState
     global client2gameState
     while True:
@@ -94,9 +94,13 @@ def handleClient(clientSocket:socket.socket, clientNum):
         state2 = int(client2gameState[8])
 
         if state1 > state2:
-            clientSocket.send(','.join(client1gameState).encode())
+            #clientSocket.send(','.join(client1gameState).encode())
+            clientList[0].send(','.join(client1gameState).encode())
+            clientList[1].send(','.join(client1gameState).encode())
         else:
-            clientSocket.send(','.join(client2gameState).encode())
+            #clientSocket.send(','.join(client2gameState).encode())
+            clientList[0].send(','.join(client1gameState).encode())
+            clientList[1].send(','.join(client1gameState).encode())
 
 
 def main():
@@ -124,8 +128,10 @@ def main():
         
             # thread.start()
             connection(serverSocket, clientSocket, clientList)
-            thread = Thread(target=handleClient, args=(clientSocket, currentNumClients))
-            thread.start()
+            thread1 = Thread(target=handleClient, args=(clientSocket, currentNumClients, clientList))
+           
+            # thread.start()
+            thread1.start()
 
         
     serverSocket.close()

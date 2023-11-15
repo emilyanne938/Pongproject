@@ -155,24 +155,37 @@ def playGame(screenWidth:int, screenHeight:int, playerPaddle:str, client:socket.
         sync += 1
         # =========================================================================================
         # Send your server update here at the end of the game loop to sync your game with your
-        # opponent's game
+        # opponent's game 
 
         # ball x, ball y, player paddle x, player paddle y, opponent paddle x, opponent paddle y, player score, opponent score, sync
-        strgamestate = f"{ball.rect.x},{ball.rect.y},{playerPaddleObj.rect.x},{playerPaddleObj.rect.y},{opponentPaddleObj.rect.x},{opponentPaddleObj.rect.y},{lScore},{rScore},{sync}"
+        strgamestate = f"{ball.rect.x},{ball.rect.y},{playerPaddleObj.rect.x},{playerPaddleObj.rect.y},{opponentPaddleObj.rect.x},{opponentPaddleObj.rect.y},{lScore},{rScore},{sync},{playerPaddle},"
 
         client.send(strgamestate.encode())
 
         stringstate = client.recv(1024).decode()
         updatedgamestate = stringstate.split(",")
-        ball.rect.x = int(updatedgamestate[0])
-        ball.rect.y = int(updatedgamestate[1])
-        playerPaddleObj.rect.x = int(updatedgamestate[2])
-        playerPaddleObj.rect.y = int(updatedgamestate[3])
-        opponentPaddleObj.rect.x = int(updatedgamestate[4])
-        opponentPaddleObj.rect.y = int(updatedgamestate[5])
-        lScore = int(updatedgamestate[6])
-        rScore = int(updatedgamestate[7])
-        sync = int(updatedgamestate[8])
+
+        # If you get the opponents game state, you need to flip the information
+        if updatedgamestate[9] == playerPaddle:
+            ball.rect.x = int(updatedgamestate[0])
+            ball.rect.y = int(updatedgamestate[1])
+            playerPaddleObj.rect.x = int(updatedgamestate[2])
+            playerPaddleObj.rect.y = int(updatedgamestate[3])
+            opponentPaddleObj.rect.x = int(updatedgamestate[4])
+            opponentPaddleObj.rect.y = int(updatedgamestate[5])
+            lScore = int(updatedgamestate[6])
+            rScore = int(updatedgamestate[7])
+            sync = int(updatedgamestate[8])
+        else:
+            ball.rect.x = int(updatedgamestate[0])
+            ball.rect.y = int(updatedgamestate[1])
+            playerPaddleObj.rect.x = int(updatedgamestate[4])
+            playerPaddleObj.rect.y =  int(updatedgamestate[5])
+            opponentPaddleObj.rect.x = int(updatedgamestate[2]) 
+            opponentPaddleObj.rect.y = int(updatedgamestate[3])
+            lScore = int(updatedgamestate[7])
+            rScore = int(updatedgamestate[6])
+            sync = int(updatedgamestate[8])
 
         
         # =========================================================================================
