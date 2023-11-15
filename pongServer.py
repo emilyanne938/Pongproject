@@ -80,25 +80,38 @@ def connection(serverSocket:socket.socket, clientSocket:socket.socket, clientLis
 def handleClient(clientSocket:socket.socket, clientNum, clientList:list[socket.socket]):
     global client1gameState
     global client2gameState
-    while True:
-        gamestate = clientSocket.recv(1024).decode()
 
-        if clientNum == 1:
-            client1gameState = gamestate.split(",")
-        elif clientNum == 2:
-            client2gameState = gamestate.split(",")
-        else:
-            print(f"ERROR: Unexpected client number {clientNum}")
+    while True:
+        # gamestate = clientSocket.recv(1024).decode()
+        client1gameState = clientList[0].recv(1024).decode().split(",")
+        client2gameState = clientList[1].recv(1024).decode().split(",")
+
+        # if clientNum == 1:
+        #     client1gameState = gamestate.split(",")
+        # elif clientNum == 2:
+        #     client2gameState = gamestate.split(",")
+        # else:
+        #     print(f"ERROR: Unexpected client number {clientNum}")
 
         state1 = int(client1gameState[8])
         state2 = int(client2gameState[8])
 
         if state1 > state2:
             #clientSocket.send(','.join(client1gameState).encode())
+
+            # we use player 2's paddle position
+            client1gameState[4] = client2gameState[2]
+            client1gameState[5] = client2gameState[3]
+
             clientList[0].send(','.join(client1gameState).encode())
             clientList[1].send(','.join(client1gameState).encode())
         else:
             #clientSocket.send(','.join(client2gameState).encode())
+
+            # we use player 1's paddle postion 
+            client2gameState[4] = client1gameState[2]
+            client2gameState[5] = client1gameState[3]
+
             clientList[0].send(','.join(client2gameState).encode())
             clientList[1].send(','.join(client2gameState).encode())
 
