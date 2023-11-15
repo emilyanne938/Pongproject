@@ -183,8 +183,8 @@ def playGame(screenWidth:int, screenHeight:int, playerPaddle:str, client:socket.
             playerPaddleObj.rect.y =  int(updatedgamestate[5])
             opponentPaddleObj.rect.x = int(updatedgamestate[2]) 
             opponentPaddleObj.rect.y = int(updatedgamestate[3])
-            lScore = int(updatedgamestate[7])
-            rScore = int(updatedgamestate[6])
+            lScore = int(updatedgamestate[6])
+            rScore = int(updatedgamestate[7])
             sync = int(updatedgamestate[8])
 
         

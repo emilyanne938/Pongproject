@@ -44,7 +44,7 @@ client2gameState = ""
 def createServer() -> socket.socket:
     serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     serverSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) 
-    serverSocket.bind(("localhost", 22225))
+    serverSocket.bind(("localhost", 22258))
     
     return serverSocket
 
@@ -99,8 +99,8 @@ def handleClient(clientSocket:socket.socket, clientNum, clientList:list[socket.s
             clientList[1].send(','.join(client1gameState).encode())
         else:
             #clientSocket.send(','.join(client2gameState).encode())
-            clientList[0].send(','.join(client1gameState).encode())
-            clientList[1].send(','.join(client1gameState).encode())
+            clientList[0].send(','.join(client2gameState).encode())
+            clientList[1].send(','.join(client2gameState).encode())
 
 
 def main():
