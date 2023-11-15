@@ -17,26 +17,28 @@ from threading import Thread
 # clients are and take actions to resync the games
  
 quit = False
+client1gameState = ""
+client2gameState = ""
 
-def status(serverSocket:socket.socket, clientSocket:socket.socket, clientList:list[socket.socket]): 
-    # clientList[0].recv(1024).decode() and clientList[1].recv(1024).decode().
-    strgamestate1 = clientList[0].recv(1024).decode()
-    strgamestate2 = clientList[1].recv(1024).decode()
-    # strgamestate1 = clientSocket.recv(1024).decode()
-    # strgamestate2 = clientSocket.recv(1024).decode()
-    # strgamestate1 = clientList[0].decode()
-    # strgamestate2 = clientList[1]
+# def status(serverSocket:socket.socket, clientSocket:socket.socket, clientList:list[socket.socket]): 
+#     # clientList[0].recv(1024).decode() and clientList[1].recv(1024).decode().
+#     strgamestate1 = clientList[0].recv(1024).decode()
+#     strgamestate2 = clientList[1].recv(1024).decode()
+#     # strgamestate1 = clientSocket.recv(1024).decode()
+#     # strgamestate2 = clientSocket.recv(1024).decode()
+#     # strgamestate1 = clientList[0].decode()
+#     # strgamestate2 = clientList[1]
 
-    updatedgamestate1 = strgamestate1.split(",")
-    updatedgamestate2 = strgamestate2.split(",")
+#     updatedgamestate1 = strgamestate1.split(",")
+#     updatedgamestate2 = strgamestate2.split(",")
 
-    state1 = int(updatedgamestate1[8])
-    state2 = int(updatedgamestate2[8])
+#     state1 = int(updatedgamestate1[8])
+#     state2 = int(updatedgamestate2[8])
 
-    if state1 > state2:
-        clientSocket.send(strgamestate1.encode())
-    else:
-        clientSocket.send(strgamestate2.encode())
+#     if state1 > state2:
+#         clientSocket.send(strgamestate1.encode())
+#     else:
+#         clientSocket.send(strgamestate2.encode())
 
 
 def createServer() -> socket.socket:
@@ -70,10 +72,31 @@ def connection(serverSocket:socket.socket, clientSocket:socket.socket, clientLis
     if playerPaddle == "right":
         clientList[0].send(str("go").encode())
 
-    while True:
-        status(serverSocket, clientSocket, clientList)
-    #clientSocket.send(str(numClients).encode())
+    # while True:
+    #     status(serverSocket, clientSocket, clientList)
+    # #clientSocket.send(str(numClients).encode())
 
+
+def handleClient(clientSocket:socket.socket, clientNum):
+    global client1gameState
+    global client2gameState
+    while True:
+        gamestate = clientSocket.recv(1024).decode()
+
+        if clientNum == 1:
+            client1gameState = gamestate.split(",")
+        elif clientNum == 2:
+            client2gameState = gamestate.split(",")
+        else:
+            print(f"ERROR: Unexpected client number {clientNum}")
+
+        state1 = int(client1gameState[8])
+        state2 = int(client2gameState[8])
+
+        if state1 > state2:
+            clientSocket.send(','.join(client1gameState).encode())
+        else:
+            clientSocket.send(','.join(client2gameState).encode())
 
 
 def main():
@@ -97,9 +120,11 @@ def main():
             # make threads
             currentNumClients += 1
 
-            thread = Thread(target = connection, args = (serverSocket, clientSocket, clientList))
-            
-            print(currentNumClients)
+            # thread = Thread(target = connection, args = (serverSocket, clientSocket, clientList))
+        
+            # thread.start()
+            connection(serverSocket, clientSocket, clientList)
+            thread = Thread(target=handleClient, args=(clientSocket, currentNumClients))
             thread.start()
 
         
