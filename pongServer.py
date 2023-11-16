@@ -29,7 +29,7 @@ client2gameState = ""
 def createServer() -> socket.socket:
     serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     serverSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) 
-    serverSocket.bind(("localhost", 22258))
+    serverSocket.bind(("10.113.0.247", 22258))
     
     return serverSocket
 
