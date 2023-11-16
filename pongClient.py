@@ -1,8 +1,8 @@
 # =================================================================================================
-# Contributing Authors:	    <Anyone who touched the code>
-# Email Addresses:          <Your uky.edu email addresses>
-# Date:                     <The date the file was last edited>
-# Purpose:                  <How this file contributes to the project>
+# Contributing Authors:	    <Emily Behrendsen, Margaret Bacon>
+# Email Addresses:          <eabe247@uky.edu, meba293@uky.edu>
+# Date:                     <11/15/2023>
+# Purpose:                  <The client of the project, holds some game logic and ablity to esablish connection>
 # Misc:                     <Not Required.  Anything else you might want to include>
 # =================================================================================================
 
@@ -209,24 +209,28 @@ def joinServer(ip:str, port:str, errorLabel:tk.Label, app:tk.Tk) -> None:
     # You don't have to use SOCK_STREAM, use what you think is best
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-    #connect to the server!
+    #connect to the server
     client.connect((ip, int(port)))
 
+    #  Send request
     msg = "Can I play?"
     client.send(msg.encode())
 
     # Get the required information from your server (screen width, height & player paddle, "left or "right)
+
+    # Recive Height and send ack to recive Width
     screenHeight = client.recv(1024).decode()
     screenHeight = int(screenHeight)
-
     msg = "height_ack"
     client.send(msg.encode()) 
 
+    # Recive Height and send ack to recive paddle
     screenWidth = client.recv(1024).decode()
     screenWidth = int(screenWidth)
     msg = "width_ack"
     client.send(msg.encode()) 
 
+    # Recive paddle
     paddle = client.recv(1024).decode()
 
 
