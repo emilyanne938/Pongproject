@@ -25,11 +25,9 @@ client2gameState = ""
 
 
 # Author:       Emily Behrendsen, Maggie Bacon
-# Purpose:      Establish a server clients can connect to
-# Pre:           <What preconditions does this method expect to be true? Ex. This method expects the program to be in X state before being called>
-#                called from main, The IP port is set correctly
-# Post:          <What postconditions are true after this method is called? Ex. This method changed global variable X to Y>
-#                Creates and opens a server socket
+# Purpose:      Establish a server socket clients can connect to
+# Pre:          Expects the IP port is set correctly
+# Post:         Creates and opens a server socket
 def createServer() -> socket.socket:
     serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     serverSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) 
@@ -40,14 +38,11 @@ def createServer() -> socket.socket:
 
 
 
-# TODO serverSocket:socket.socket, 
 # Author:       Emily Behrendsen, Maggie Bacon
-# Purpose:      To assingn left and right paddles, screen height and width,  and get servers to start together
-# Pre:           <What preconditions does this method expect to be true? Ex. This method expects the program to be in X state before being called>
-#               Server has started, A client has joined the server, they have sent a can I play request and there are less then three clients
-# Post:          <What postconditions are true after this method is called? Ex. This method changed global variable X to Y>
-#                The two players are have thier paddles, the size of the screen and have started playing the game. 
-def connection(serverSocket:socket.socket, clientSocket:socket.socket, clientList:list[socket.socket]):
+# Purpose:      To assingn left and right paddles, screen height and width, and get servers to start together
+# Pre:          Server has started, A client has joined the server, they have sent a can I play request and there are less then three clients
+# Post:         The two players are have thier paddles, the size of the screen and have started playing the game. 
+def connection(clientSocket:socket.socket, clientList:list[socket.socket]) -> None:
     msg = ""
     screenWidth = 640
     screenHeight = 480
@@ -78,14 +73,12 @@ def connection(serverSocket:socket.socket, clientSocket:socket.socket, clientLis
 
 
 
-# TODO clientSocket:socket.socket,
 # Author:       Emily Behrendsen, Maggie Bacon
 # Purpose:      To handle Game State synchronization between clients
-# Pre:           <What preconditions does this method expect to be true? Ex. This method expects the program to be in X state before being called>
+# Pre:          Expects the clients have started the game 
 #               Expects the clients have started the game 
-# Post:          <What postconditions are true after this method is called? Ex. This method changed global variable X to Y>
-#               The game has been played in sync, and there is a winner
-def handleClient(clientSocket:socket.socket, clientList:list[socket.socket]):
+# Post:         The game has been played in sync, and there is a winner
+def handleClient(clientSocket:socket.socket, clientList:list[socket.socket]) -> None:
     global client1gameState
     global client2gameState
 
@@ -116,12 +109,11 @@ def handleClient(clientSocket:socket.socket, clientList:list[socket.socket]):
 
 
 # Author:       Emily Behrendsen, Maggie Bacon
-# Purpose:       <What should this method do>
-# Pre:           <What preconditions does this method expect to be true? Ex. This method expects the program to be in X state before being called>
+# Purpose:      Set up threads and call methods
+# Pre:          The server script was ran
 #               The server script was ran
-# Post:          <What postconditions are true after this method is called? Ex. This method changed global variable X to Y>
-#                The socket is closed, the threads were created and the game had been played all the way though
-def main():
+# Post:         The socket is closed, the threads were created and the game had been played all the way though
+def main() -> None:
     serverSocket = createServer()
     serverSocket.listen()
     
@@ -140,7 +132,7 @@ def main():
         if (msg == "Can I play?") and (currentNumClients <= maxplayers):
             currentNumClients += 1
 
-            connection(serverSocket, clientSocket, clientList)
+            connection(clientSocket, clientList)
             thread1 = Thread(target=handleClient, args=(clientSocket, clientList))
         
             thread1.start()
