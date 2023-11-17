@@ -24,23 +24,29 @@ client2gameState = ""
 
 
 
- # Purpose:      Establish a server clients can connect to
- #  returns:     server socket
+# Author:       Emily Behrendsen, Maggie Bacon
+# Purpose:      Establish a server clients can connect to
+# Pre:           <What preconditions does this method expect to be true? Ex. This method expects the program to be in X state before being called>
+#                called from main, The IP port is set correctly
+# Post:          <What postconditions are true after this method is called? Ex. This method changed global variable X to Y>
+#                Creates and opens a server socket
 def createServer() -> socket.socket:
     serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     serverSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) 
-    serverSocket.bind(("10.113.0.247", 22258))
+    serverSocket.bind(("localhost", 22258))
     
     return serverSocket
 
 
 
 
- # Purpose:      To assingn left and right paddles, screen height and width,  and get servers to start together
-    # Arguments:
-    # serverSocket  
-    # clientSocket        
-    # clientList      an array of client sockets connected 
+# TODO serverSocket:socket.socket, 
+# Author:       Emily Behrendsen, Maggie Bacon
+# Purpose:      To assingn left and right paddles, screen height and width,  and get servers to start together
+# Pre:           <What preconditions does this method expect to be true? Ex. This method expects the program to be in X state before being called>
+#               Server has started, A client has joined the server, they have sent a can I play request and there are less then three clients
+# Post:          <What postconditions are true after this method is called? Ex. This method changed global variable X to Y>
+#                The two players are have thier paddles, the size of the screen and have started playing the game. 
 def connection(serverSocket:socket.socket, clientSocket:socket.socket, clientList:list[socket.socket]):
     msg = ""
     screenWidth = 640
@@ -72,10 +78,13 @@ def connection(serverSocket:socket.socket, clientSocket:socket.socket, clientLis
 
 
 
- # Purpose:      To handle synchronization between clients
-    # Arguments: 
-    # clientSocket               
-    # clientList      an array of client sockets connected 
+# TODO clientSocket:socket.socket,
+# Author:       Emily Behrendsen, Maggie Bacon
+# Purpose:      To handle Game State synchronization between clients
+# Pre:           <What preconditions does this method expect to be true? Ex. This method expects the program to be in X state before being called>
+#               Expects the clients have started the game 
+# Post:          <What postconditions are true after this method is called? Ex. This method changed global variable X to Y>
+#               The game has been played in sync, and there is a winner
 def handleClient(clientSocket:socket.socket, clientList:list[socket.socket]):
     global client1gameState
     global client2gameState
@@ -106,9 +115,12 @@ def handleClient(clientSocket:socket.socket, clientList:list[socket.socket]):
 
 
 
-
-
- # Purpose:      Main funciton, establish connections and create threads
+# Author:       Emily Behrendsen, Maggie Bacon
+# Purpose:       <What should this method do>
+# Pre:           <What preconditions does this method expect to be true? Ex. This method expects the program to be in X state before being called>
+#               The server script was ran
+# Post:          <What postconditions are true after this method is called? Ex. This method changed global variable X to Y>
+#                The socket is closed, the threads were created and the game had been played all the way though
 def main():
     serverSocket = createServer()
     serverSocket.listen()

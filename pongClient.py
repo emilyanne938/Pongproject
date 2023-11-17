@@ -1,7 +1,7 @@
 # =================================================================================================
 # Contributing Authors:	    <Emily Behrendsen, Margaret Bacon>
 # Email Addresses:          <eabe247@uky.edu, meba293@uky.edu>
-# Date:                     <11/15/2023>
+# Date:                     <Last Edited: 11/17/2023>
 # Purpose:                  <The client of the project, holds some game logic and ablity to esablish connection>
 # Misc:                     <Not Required.  Anything else you might want to include>
 # =================================================================================================
